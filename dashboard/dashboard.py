@@ -1,8 +1,8 @@
 import pandas as pd
+import numpy as np
 import matplotlib.pyplot as plt
 import seaborn as sns
 import streamlit as st
-from babel.numbers import format_currency
 sns.set(style='darkgrid')
 
 # Title page
@@ -10,7 +10,7 @@ st.set_page_config(page_title="Tiantian's Air Quality Analysis by michellealvera
 
 
 # Load dataset
-data = pd.read_csv("/content/PRSA_Data_Tiantan_20130301-20170228.csv")
+data = pd.read_csv("./data/PRSA_Data_Tiantan_20130301-20170228.csv")
 
 # Title of the dashboard
 st.title('Air Quality Analysis Dashboard: Tiantian Station')
@@ -26,7 +26,7 @@ st.markdown("""
 ### About Me
 - **Name**: Michelle Alvera Lolang
 - **Email Address**: michellemialo8@gmail.com
-- **Dicoding ID**: https://www.dicoding.com/users/michellealvera/
+- **Dicoding ID**: https://www.dicoding.com/users/michelle_alvera/
 
 ### Project Overview
 This dashboard provides an analysis of air quality data, focusing on PM2.5 levels, collected from the Tiantian station. The goal of this project is to identify trends, seasonal patterns, and the impact of various weather conditions on air quality. Insights gained from this analysis can be valuable for environmental studies and public health surveillance.
@@ -92,7 +92,7 @@ st.pyplot(fig)
 st.subheader('Time Series Decomposition of PM2.5')
 try:
     data_filtered['PM2.5'].ffill(inplace=True)
-    decomposed = data(data_filtered['PM2.5'], model='additive', period=24) # Adjust period as necessary
+    decomposed = data(data_filtered['PM2.5'], model='additive', period=24)
     fig, (ax1, ax2, ax3) = plt.subplots(3, 1, figsize=(10, 8))
     decomposed.trend.plot(ax=ax1, title='Trend')
     decomposed.seasonal.plot(ax=ax2, title='Seasonality')
@@ -108,12 +108,12 @@ except ValueError as e:
 st.subheader('Hourly Averages of PM2.5')
 try:
     # Ensure correct data types and handle missing values
-    data['hour'] = data['hour'].astype(int)
-    data['PM2.5'] = pd.to_numeric(data['PM2.5'], errors='coerce')
-    data['PM2.5'].ffill(inplace=True)
+    data_filtered['hour'] = data['hour'].astype(int)
+    data_filtered['PM2.5'] = pd.to_numeric(data['PM2.5'], errors='coerce')
+    data_filtered['PM2.5'].ffill(inplace=True)
 
     # Calculate hourly averages
-    hourly_avg = data.groupby('hour')['PM2.5'].mean()
+    hourly_avg = data_filtered.groupby('hour')['PM2.5'].mean()
 
     # Plotting
     fig, ax = plt.subplots()
