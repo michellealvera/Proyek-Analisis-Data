@@ -3,6 +3,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 import seaborn as sns
 import streamlit as st
+from statsmodels.tsa.seasonal import seasonal_decompose
 sns.set(style='darkgrid')
 
 # Title page
@@ -92,7 +93,7 @@ st.pyplot(fig)
 st.subheader('Time Series Decomposition of PM2.5')
 try:
     data_filtered['PM2.5'].ffill(inplace=True)
-    decomposed = data(data_filtered['PM2.5'], model='additive', period=24)
+    decomposed = seasonal_decompose(data_filtered['PM2.5'], model='additive', period=24)
     fig, (ax1, ax2, ax3) = plt.subplots(3, 1, figsize=(10, 8))
     decomposed.trend.plot(ax=ax1, title='Trend')
     decomposed.seasonal.plot(ax=ax2, title='Seasonality')
